@@ -7,36 +7,33 @@ import {
   FETCH_MESSAGE
 } from './types';
 
-const ROOT_URL = 'http://localhost:3090';
+const ROOT_URL = 'http://ec2-35-169-227-105.compute-1.amazonaws.com';
 
 export function loginUser({ email, password }) {
   return function(dispatch) {
-    // Submit email/password to the server
-    axios.post(`${ROOT_URL}/login`, { email, password })
+    axios.post(`${ROOT_URL}/auth/login`)
       .then(response => {
-        // If request is good...
-        // - Update state to indicate user is authenticated
         dispatch({ type: AUTH_USER });
-        // - Save the JWT token
+
         localStorage.setItem('token', response.data.token);
-        // - redirect to the route '/feature'
-        browserHistory.push('/feature');
+
+        browserHistory.push('/home');
       })
-      .catch(() => {
-        // If request is bad...
-        // - Show an error to the user
+      .catch((error) => {
+        console.log("Login Error Data: ", error);
+        
         dispatch(authError('Bad Login Info'));
       });
   }
 }
 
-export function signupUser({ email, password }) {
+export function signupUser({ username, email, password }) {
   return function(dispatch) {
-    axios.post(`${ROOT_URL}/signup`, { email, password })
+    axios.post(`${ROOT_URL}/auth/signup`, { username, email, password })
       .then(response => {
         dispatch({ type: AUTH_USER });
         localStorage.setItem('token', response.data.token);
-        browserHistory.push('/feature');
+        browserHistory.push('/home');
       })
       .catch(response => dispatch(authError(response.data.error)));
   }

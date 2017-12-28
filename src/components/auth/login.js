@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import * as actions from '../../actions';
 
-class Signin extends Component {
+class Login extends Component {
   handleFormSubmit({ email, password }) {
-    // Need to do something to log user in
-    this.props.signinUser({ email, password });
+    this.props.loginUser({ email, password });
   }
 
   renderAlert() {
     if (this.props.errorMessage) {
+      console.log("Login error message from react :", this.props.errorMessage);
+
       return (
         <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.errorMessage}
+          <strong>Oops!</strong> Something went wrong
         </div>
       );
     }
@@ -45,4 +46,4 @@ function mapStateToProps(state) {
 export default reduxForm({
   form: 'signin',
   fields: ['email', 'password']
-}, mapStateToProps, actions)(Signin);
+}, mapStateToProps, actions)(Login);
